@@ -198,6 +198,9 @@ int main(int argc, char *argv[])
     patch_input(&libyoyo);
     patch_gamepad(&libyoyo);
     patch_mouse(&libyoyo);
+    #if BUILD_FMOD
+    patch_fmod(&libyoyo);
+    #endif
 
     int *ms_freq = NULL;
     if (has_al)

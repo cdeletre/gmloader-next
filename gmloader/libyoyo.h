@@ -235,6 +235,7 @@ extern ABI_ATTR int32_t (*Graphics_DisplayHeight)();
 extern ABI_ATTR int32_t (*Graphics_DisplayWidth)();
 extern ABI_ATTR int32_t (*YYGetInt32)(RValue *val, int idx);
 extern ABI_ATTR double (*YYGetReal)(RValue *val, int idx);
+extern ABI_ATTR char* (*YYGetString)(RValue *val, int idx);
 extern ABI_ATTR void (*YYCreateString)(RValue *, const char *);
 extern ABI_ATTR routine_t F_YoYo_DrawTextureFlush;
 extern ABI_ATTR uint32_t *(*ReadPNGFile)(void *a1, int a2, int *a3, int *a4, int a5);
@@ -281,5 +282,8 @@ extern void patch_libyoyo(struct so_module *mod);
 extern void patch_input(struct so_module *mod);
 extern void patch_gamepad(struct so_module *mod);
 extern void patch_mouse(struct so_module *mod);
+#if BUILD_FMOD
+extern void patch_fmod(struct so_module *mod);
+#endif
 extern int update_inputs(struct SDL_Window *sdl_win);
 void disable_depth();

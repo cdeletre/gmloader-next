@@ -23,6 +23,7 @@ Now build the project for your desired target platforms, the following build opt
 - `LLVM_FILE`: Specify the LLVM Clang library file, e.g.: `/usr/lib/llvm-9/lib/libclang-9.so.1` for clang-9.
 - `LLVM_INC`: Specify the path for LLVM includes for your architecture, e.g.: `aarch64-linux-gnu`.
 - `OPTM`: Specify the optimization flags, e.g.: `-O3`, `-Os` or `-Og -ggdb`.
+- `ENABLE_FMOD`: build with fmod support when set to `ON`. Note: you need to copy the fmod core API into `3rdparty/fmod`.
 
 ```bash
 make -f Makefile.gmloader ARCH=aarch64-linux-gnu
@@ -70,7 +71,8 @@ GMLoader-next can load a json formatted configuration file using the `-c` option
     "show_cursor" : false,
     "disable_controller" : false,
     "disable_depth" : false,
-    "force_platform" : "os_windows"
+    "force_platform" : "os_windows",
+    "fmod_bank_path" : "my_game/sound/Desktop/"
 }
 ```
 
@@ -84,6 +86,7 @@ When no configuration file is present the default values are:
 | disable_controller | false         |
 | disable_depth      | false         |
 | force_platform     | os_android    |
+| fmod_bank_path     | ./            |
 
 Supported values for force_platform are:
 - os_unknown

@@ -1,4 +1,6 @@
 ARCH ?= aarch64-linux-gnu
+ENABLE_FMOD?=OFF
+BUILD_FMOD=0
 CROSS ?= ${ARCH}-
 CC := ${CROSS}gcc
 CXX := ${CROSS}g++
@@ -10,10 +12,21 @@ GIT_BRANCH = ${GITHUB_REF_NAME}
 GIT_BRANCH_FRIENDLY = $(subst -,_,$(GIT_BRANCH))
 
 DEVICE_ARCH = aarch64
+FMOD_ARCH=arm64
 
 ifeq ($(ARCH), arm-linux-gnueabihf)
 	DEVICE_ARCH = armhf
+	FMOD_ARCH=arm
 endif
+
+INCLUDE_DIRS=\
+	-I. \
+	-I./thunks/ \
+	-I./loader/ \
+	-I./gmloader/ \
+	-I./build/${ARCH}/thunks/libc \
+	-I./jni/ \
+	-I./3rdparty/json/include
 
 LIBS=\
 	-pthread \
@@ -23,11 +36,25 @@ LIBS=\
 	$(shell ${PKG_CONFIG} zlib --libs) \
 	$(shell ${PKG_CONFIG} libzip --libs)
 
+ifeq ($(ENABLE_FMOD), ON)
+	LIBS+=\
+		-L3rdparty/fmod/api/core/lib/${FMOD_ARCH} -lfmodL \
+	    -L3rdparty/fmod/api/studio/lib/${FMOD_ARCH} -lfmodstudioL
+
+	INCLUDE_DIRS+=\
+		-I./3rdparty/fmod/api/core/inc \
+		-I./3rdparty/fmod/api/studio/inc
+
+	BUILD_FMOD=1
+
+endif
+
 # General compilation flags
 OPTM?=-Os
-COMMONFLAGS=-Wno-strict-aliasing -Werror=return-type -I. -I./thunks/ -I./loader/ -I./gmloader/ -I./build/${ARCH}/thunks/libc -I./jni/ -I./3rdparty/json/include ${OPTM} -MMD
-CFLAGS=$(shell ${PKG_CONFIG} sdl2 --cflags) ${COMMONFLAGS}
-CXXFLAGS=-std=gnu++2a -fuse-cxa-atexit $(shell ${PKG_CONFIG} sdl2 --cflags) ${COMMONFLAGS}
+COMMONFLAGS=-Wno-strict-aliasing -Werror=return-type ${OPTM} -MMD
+
+CFLAGS=$(shell ${PKG_CONFIG} sdl2 --cflags) ${INCLUDE_DIRS} ${COMMONFLAGS}
+CXXFLAGS=-std=gnu++2a -fuse-cxa-atexit $(shell ${PKG_CONFIG} sdl2 --cflags) -DBUILD_FMOD=${BUILD_FMOD} ${INCLUDE_DIRS} ${COMMONFLAGS}
 LDFLAGS=-L3rdparty/libbsd/src/.libs ${OPTM} -Wl,--defsym,BUILD_DATE_$(BUILD_DATE)=0 -Wl,--defsym,GIT_HASH_$(GITHUB_SHA)=0 -Wl,--defsym,GIT_BRANCH_$(GIT_BRANCH_FRIENDLY)=0
 
 # General pre-processing flags

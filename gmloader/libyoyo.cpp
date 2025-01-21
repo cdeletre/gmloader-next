@@ -18,6 +18,7 @@ ABI_ATTR int32_t (*Graphics_DisplayHeight)() = NULL;
 ABI_ATTR int32_t (*Graphics_DisplayWidth)() = NULL;
 ABI_ATTR int32_t (*YYGetInt32)(RValue *val, int idx) = NULL;
 ABI_ATTR double (*YYGetReal)(RValue *val, int idx) = NULL;
+ABI_ATTR char* (*YYGetString)(RValue *val, int idx) = NULL;
 ABI_ATTR void (*YYCreateString)(RValue *val, const char *str) = NULL;
 ABI_ATTR routine_t F_YoYo_DrawTextureFlush = NULL;
 ABI_ATTR uint32_t *(*ReadPNGFile)(void *a1, int a2, int *a3, int *a4, int a5) = NULL;
@@ -185,6 +186,7 @@ void patch_libyoyo(so_module *mod)
     ENSURE_SYMBOL(mod, the_numb, "the_numb");
     ENSURE_SYMBOL(mod, YYGetInt32, "_Z10YYGetInt32PK6RValuei");
     ENSURE_SYMBOL(mod, YYGetReal, "_Z9YYGetRealPK6RValuei");
+    ENSURE_SYMBOL(mod, YYGetString, "_Z11YYGetStringPK6RValuei");
     ENSURE_SYMBOL(mod, _IO_ButtonDown, "_IO_ButtonDown");
     ENSURE_SYMBOL(mod, _IO_ButtonPressed, "_IO_ButtonPressed");
     ENSURE_SYMBOL(mod, _IO_ButtonReleased, "_IO_ButtonReleased");
