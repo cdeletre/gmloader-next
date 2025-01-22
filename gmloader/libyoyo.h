@@ -277,13 +277,13 @@ extern uintptr_t *New_Room;
 extern void **g_nYYCode;
 extern void **g_pGameFileBuffer;
 extern void **g_ppYYStackTrace;
+extern int *Extension_Main_number;
 
 extern void patch_libyoyo(struct so_module *mod);
 extern void patch_input(struct so_module *mod);
 extern void patch_gamepad(struct so_module *mod);
 extern void patch_mouse(struct so_module *mod);
-#if BUILD_FMOD
 extern void patch_fmod(struct so_module *mod);
-#endif
+extern void patch_gameframe(struct so_module *mod);
 extern int update_inputs(struct SDL_Window *sdl_win);
 void disable_depth();
