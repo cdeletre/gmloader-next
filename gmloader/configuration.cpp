@@ -12,7 +12,7 @@ void from_json(const json& j, gml_config& c) {
     get_if_exists("disable_controller", disable_controller);
     get_if_exists("disable_depth", disable_depth);
     get_if_exists("force_platform", force_platform);
-#if BUILD_FMOD
+#ifdef USE_FMOD
     get_if_exists("fmod_bank_path", fmod_bank_path);
 #endif
 }
@@ -24,7 +24,7 @@ void gml_config::init_defaults(){
     disable_controller = false;
     disable_depth = false;
     force_platform = "os_android";
-#if BUILD_FMOD
+#ifdef USE_FMOD
     fmod_bank_path = "";
 #endif
 }
@@ -57,7 +57,7 @@ void gml_config::show_config(){
     printf("config: disable_controller = %d\n", disable_controller);
     printf("config: disable_depth = %d\n", disable_depth);
     printf("config: force_platform = %s\n", force_platform.c_str());
-#if BUILD_FMOD
+#ifdef USE_FMOD
     printf("config: fmod_bank_path = %s\n", fmod_bank_path.c_str());
 #endif
 }

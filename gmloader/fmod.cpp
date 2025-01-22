@@ -80,15 +80,19 @@ ABI_ATTR void fmod_bank_load(RValue *ret, void *self, void *other, int argc, RVa
 {
     ret->kind = VALUE_REAL;
 
-    const char *bank_name = AccessYYString(args, 0);
+    std::string bank_name = AccessYYString(args, 0);
     double isBlocking = YYGetReal(args, 1);
+
+    if (bank_name.find("assets") == 0) { // "assets" found at the start
+        bank_name.replace(0, 6, gmloader_config.fmod_bank_path);
+    }
 
     fs::path bank_path = bank_name;
     FMOD::Studio::Bank* bank;
     FMOD_RESULT result = fmod_studio_system->loadBankFile(bank_path.c_str(), (isBlocking != 0.0), &bank);
     if (result != FMOD_OK)
     {
-        fatal_error("[FMOD]: Failed to load bank '%s'!", bank_name);
+        fatal_error("[FMOD]: Failed to load bank '%s'!", bank_name.c_str());
         ret->rvalue.val = 0.0;
         return;
     }
@@ -463,7 +467,12 @@ ABI_ATTR void fmod_bank_load_sample_data(RValue *ret, void *self, void *other, i
     ret->kind = VALUE_REAL;
     ret->rvalue.val = 0.0;
 
-    const char *bank_name = AccessYYString(args, 0);
+    std::string bank_name = AccessYYString(args, 0);
+
+    if (bank_name.find("assets") == 0) { // "assets" found at the start
+        bank_name.replace(0, 6, gmloader_config.fmod_bank_path);
+    }
+
     fs::path bank_path = bank_name;
     FMOD::Studio::Bank* bank;
     FMOD_RESULT result = fmod_studio_system->loadBankFile(bank_path.c_str(), FMOD_STUDIO_LOAD_BANK_NORMAL, &bank);
