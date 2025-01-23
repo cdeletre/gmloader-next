@@ -14,6 +14,7 @@ void from_json(const json& j, gml_config& c) {
     get_if_exists("force_platform", force_platform);
 #ifdef USE_FMOD
     get_if_exists("fmod_bank_path", fmod_bank_path);
+    get_if_exists("fmod_load_sample_data", fmod_load_sample_data);
 #endif
 }
 
@@ -26,6 +27,7 @@ void gml_config::init_defaults(){
     force_platform = "os_android";
 #ifdef USE_FMOD
     fmod_bank_path = "";
+    fmod_load_sample_data = false;
 #endif
 }
 
@@ -59,5 +61,6 @@ void gml_config::show_config(){
     printf("config: force_platform = %s\n", force_platform.c_str());
 #ifdef USE_FMOD
     printf("config: fmod_bank_path = %s\n", fmod_bank_path.c_str());
+    printf("config: fmod_load_sample_data = %d\n", fmod_load_sample_data);
 #endif
 }

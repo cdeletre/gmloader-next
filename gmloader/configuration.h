@@ -15,6 +15,7 @@ struct gml_config {
     bool disable_depth;
     std::string force_platform;
     std::string fmod_bank_path;
+    bool fmod_load_sample_data;
 
     friend void from_json(const json& j, gml_config& c);
     void init_defaults();

@@ -97,6 +97,16 @@ ABI_ATTR void fmod_bank_load(RValue *ret, void *self, void *other, int argc, RVa
         return;
     }
 
+    if (gmloader_config.fmod_load_sample_data){
+        result = bank->loadSampleData();
+        if (result != FMOD_OK)
+        {
+            fatal_error("[FMOD]: Failed to load sample data for bank '%s'!", bank_name.c_str());
+            ret->rvalue.val = 0.0;
+            return;
+        }
+    }
+
     ret->rvalue.val = 1.0;
 }
 
@@ -465,24 +475,6 @@ ABI_ATTR void fmod_event_instance_set_timeline_pos(RValue *ret, void *self, void
 ABI_ATTR void fmod_bank_load_sample_data(RValue *ret, void *self, void *other, int argc, RValue *args)
 {
     ret->kind = VALUE_REAL;
-    ret->rvalue.val = 0.0;
-
-    std::string bank_name = AccessYYString(args, 0);
-
-    if (bank_name.find("assets") == 0) { // "assets" found at the start
-        bank_name.replace(0, 6, gmloader_config.fmod_bank_path);
-    }
-
-    fs::path bank_path = bank_name;
-    FMOD::Studio::Bank* bank;
-    FMOD_RESULT result = fmod_studio_system->loadBankFile(bank_path.c_str(), FMOD_STUDIO_LOAD_BANK_NORMAL, &bank);
-    if (result != FMOD_OK)
-        return;
-
-    result = bank->loadSampleData();
-    if (result != FMOD_OK)
-        return;
-
     ret->rvalue.val = 1.0;
 }
 
